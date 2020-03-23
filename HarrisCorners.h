@@ -9,6 +9,7 @@
 
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 #include <experimental/filesystem>
 
 namespace fs = std::experimental::filesystem;
@@ -17,6 +18,8 @@ using namespace std;
 using namespace cv;
 
 #define K_HARRIS 0.04
+#define WIN_W   5 // select the odd numbers
+#define WIN_H	5
 
 class HarrisCorners
 {
@@ -25,8 +28,9 @@ public:
     {
         this->imagePath = imagePath;
     }
-    HarrisCorners(){};
-    bool responseCalculation();
+    HarrisCorners(){
+	};
+    bool calcHarrisRespone(const Mat M, float& R_score);
     bool computeCorners();
     bool isFileExist(string filePath);
     bool isPathExist(string fileDir);
@@ -39,6 +43,7 @@ private:
     Mat grayImage;
     Mat intensityGradX;
     Mat intensityGradY;
-    Mat structureTensor;
-    double score_R;
+	vector<Point> cornesPoints;
+
+	bool calcStructureTensor(const Mat Ix, const Mat Iy, Mat& M);
 };
